@@ -43,7 +43,18 @@ if (args.rules || args.r) {
 const playerChoice = args._[0];
 
 // Play RPSLS game
-const result = rpsls(playerChoice);
+let result;
+try {
+  result = rpsls(playerChoice);
+} catch (error) {
+  console.error(`Error: ${error.message}`);
+  console.log(); // Empty line for spacing
+  printUsage();
+  console.log(); // Empty line for spacing
+  printRules();
+  process.exit(1);
+}
 
 // Print game result
 console.log(JSON.stringify(result, null, 2));
+
