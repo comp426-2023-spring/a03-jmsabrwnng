@@ -1,43 +1,47 @@
 #!/usr/bin/env node
 
+import minimist from 'minimist';
+import { rps } from '../lib/rpsls.js';
 
-const { playRPS } = require('../lib/rpsls.js');
-const argv = require('minimist')(process.argv.slice(2));
+// Parse command-line arguments
+const args = minimist(process.argv.slice(2));
 
-// Display help text
-if (argv.h || argv.help) {
-  console.log(`
-    Rock Paper Scissors CLI
+// Function to print usage and help text
+function printUsage() {
+  console.log(`Usage: node-rps [choice]`);
+  console.log(`Options:`);
+  console.log(`  choice  Specify player choice (rock, paper, or scissors)`);
+  console.log(`          If not provided, a random choice will be made.`);
+  console.log(`  --help, -h   Display help text`);
+  console.log(`  --rules, -r  Display game rules`);
+}
 
-    Usage: node-rps [option]
+// Function to print game rules
+function printRules() {
+  console.log(`Game Rules:`);
+  console.log(`- Rock beats Scissors`);
+  console.log(`- Scissors beats Paper`);
+  console.log(`- Paper beats Rock`);
+  console.log(`- If both players choose the same option, it's a tie.`);
+}
 
-    Options:
-      -h, --help      Show help text
-      -r, --rules     Show game rules
-  `);
+// Check for help flag
+if (args.help || args.h) {
+  printUsage();
   process.exit(0);
 }
 
-// Display game rules
-if (argv.r || argv.rules) {
-  console.log(`
-    Rock Paper Scissors Rules:
-
-    Rock beats Scissors
-    Scissors beats Paper
-    Paper beats Rock
-  `);
+// Check for rules flag
+if (args.rules || args.r) {
+  printRules();
   process.exit(0);
 }
 
-// Play the game
-const result = playRPS(argv._[0]);
+// Get player choice
+const playerChoice = args._[0];
 
-// Print the game result
-if (result.error) {
-  console.error(result.error);
-} else {
-  console.log(`Player: ${result.player}`);
-  console.log(`Opponent: ${result.opponent}`);
-  console.log(`Result: ${result.result}`);
-}
+// Play RPS game
+const result = rps(playerChoice);
+
+// Print game result
+console.log(JSON.stringify(result, null, 2));
