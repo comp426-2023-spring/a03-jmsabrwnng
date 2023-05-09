@@ -41,7 +41,17 @@ if (args.rules || args.r) {
 const playerChoice = args._[0];
 
 // Play RPS game
-const result = rps(playerChoice);
+let result;
+try {
+  result = rps(playerChoice);
+} catch (error) {
+  console.error(`Error: ${error.message}`);
+  console.log(); // Empty line for spacing
+  printUsage();
+  console.log(); // Empty line for spacing
+  printRules();
+  process.exit(1);
+}
 
 // Print game result
 console.log(JSON.stringify(result, null, 2));
